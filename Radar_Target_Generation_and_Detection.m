@@ -10,10 +10,10 @@ clc;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %speed of light = 3e8
 
-oper_freq = 77e9;
 max_range = 200;
 range_res = 1;
 max_vel = 100;
+vel_res = 3;
 C = 3e8;
 
 %% User Defined Range and Velocity of target
@@ -21,7 +21,7 @@ C = 3e8;
 % define the target's initial position and velocity. Note : Velocity
 % remains contant
 v_0 = 30; % 30 m/s
-pos_0 = 150; % 150 m 
+target_pos = 150; % 150 m 
 
 %% FMCW Waveform Generation
 
@@ -45,9 +45,8 @@ Nd=128;                   % #of doppler cells OR #of sent periods % number of ch
 %The number of samples on each chirp. 
 Nr=1024;                  %for length of time OR # of range cells
 
-% Timestamp for running the displacement scenario for every sample on each
-% chirp
-t=linspace(0,Nd*Tchirp,Nr*Nd); %total time for samples
+% Timestamp for running the displacement scenario for every sample on each chirp
+t=linspace(0,Nd*Ts,Nr*Nd); %total time for samples 
 
 
 %Creating the vectors for Tx, Rx and Mix based on the total samples input.
@@ -57,7 +56,7 @@ Mix = zeros(1,length(t)); %beat signal
 
 %Similar vectors for range_covered and time delay.
 r_t=zeros(1,length(t));
-td=zeros(1,length(t));
+td=zeros(1,length(t)); % trip time 
 
 
 %% Signal generation and Moving Target simulation
@@ -68,18 +67,22 @@ for i=1:length(t)
     
     % *%TODO* :
     %For each time stamp update the Range of the Target for constant velocity. 
+    r_t(i) = target_pos + v_0 * t(i); 
+    td(i) = 2*r_t(i) / C;
     
     % *%TODO* :
     %For each time sample we need update the transmitted and
     %received signal. 
-    Tx(i) = 
-    Rx (i)  =
+    
+    Tx(i) = cos(2*pi*(fc*t(i) + 0.5*slope*t(i)*t(i)));
+    Rx(i) = cos(2*pi*(fc*(t(i) - td(i)) + 0.5*slope*pow2(t(i)-td(i))));
     
     % *%TODO* :
     %Now by mixing the Transmit and Receive generate the beat signal
     %This is done by element wise matrix multiplication of Transmit and
     %Receiver Signal
-    Mix(i) = 
+    
+    Mix(i) = Tx(i).*Rx(i);
     
 end
 
