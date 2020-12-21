@@ -2,11 +2,11 @@ clear all
 clc;
 
 function out = pow2db(val)
-  out = 10*log10(val);
+  out = 10.*log10(val);
 endfunction
 
 function out = db2pow(val)
-  out = (10^(val/10)) / 1000;
+  out = 10.^(val/10);
 endfunction
 
 %% Radar Specifications 
@@ -161,14 +161,14 @@ figure,surf(doppler_axis,range_axis,RDM);
 
 % *%TODO* :
 %Select the number of Training Cells in both the dimensions.
-Tr = 12;
-Td = 10;
+Tr = 14;
+Td = 8;
 
 % *%TODO* :
 %Select the number of Guard Cells in both dimensions around the Cell under 
 %test (CUT) for accurate estimation
-Gr = 4;
-Gd = 4;
+Gr = 3;
+Gd = 2;
 
 % *%TODO* :
 % offset the threshold by SNR value in dB
@@ -211,7 +211,7 @@ for i = Tr+Gr+1:(Nr/2)-(Gr+Tr)
         threshold = pow2db(noise_level/(2*(Td+Gd+1)*2*(Tr+Gr+1)-(Gr*Gd)-1));
         threshold = threshold + thre_offset;
         CUT = RDM(i,j);
-        
+        % disp(i);
         if (CUT < threshold)
             RDM(i,j) = 0;
         else
