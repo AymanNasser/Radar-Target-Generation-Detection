@@ -3,11 +3,13 @@ clc;
 
 function out = pow2db(val)
   out = 10.*log10(val);
-endfunction
+% endfunction
+end
 
 function out = db2pow(val)
   out = 10.^(val/10);
-endfunction
+% endfunction
+end
 
 %% Radar Specifications 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
