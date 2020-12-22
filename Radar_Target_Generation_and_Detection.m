@@ -1,16 +1,6 @@
 clear all
 clc;
 
-function out = pow2db(val)
-  out = 10.*log10(val);
-% endfunction
-end
-
-function out = db2pow(val)
-  out = 10.^(val/10);
-% endfunction
-end
-
 %% Radar Specifications 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Frequency of operation = 77GHz
@@ -241,5 +231,14 @@ figure,surf(doppler_axis,range_axis,RDM);
 colorbar;
 
 
- 
+function out = pow2db(val)
+  out = 10.*log10(val);
+% endfunction
+end
+
+function out = db2pow(val)
+  out = 10.^(val/10);
+% endfunction
+end
+
  
